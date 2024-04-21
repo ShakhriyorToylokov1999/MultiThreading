@@ -39,7 +39,6 @@ namespace MultiThreading.Task1._100Tasks
             }
 
             Console.WriteLine("All tasks completed. Press any key to exit.");
-            Console.ReadKey();
         }
 
         static void Output(int taskNumber, int iterationNumber)
