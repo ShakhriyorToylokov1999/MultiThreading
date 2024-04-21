@@ -23,14 +23,14 @@ namespace MultiThreading.Task1._100Tasks
 
         static void HundredTasks()
         {
-            Task[] tasks = new Task[100];
+            Task[] tasks = new Task[TaskAmount];
         
-            for (int i = 1; i < tasks.Length; i++)
+            for (int i = 0; i < tasks.Length; i++)
             {
                 int taskNumber = i; 
                 tasks[i] = Task.Run(() =>
                 {
-                    for (int j = 1; j <= 1000; j++)
+                    for (int j = 1; j <= MaxIterationsCount; j++)
                     {
                         Output(taskNumber,j);
                     }
