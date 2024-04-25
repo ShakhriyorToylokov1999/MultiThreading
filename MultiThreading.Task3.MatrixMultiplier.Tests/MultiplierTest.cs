@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
@@ -18,10 +19,47 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
         [TestMethod]
         public void ParallelEfficiencyTest()
         {
-            // todo: implement a test method to check the size of the matrix which makes parallel multiplication more effective than
-            // todo: the regular one
+            var matricesMultiplier = new MatricesMultiplier();
+            var matricesMultiplierParallel = new MatricesMultiplierParallel();
+            long regularDuration = 0;
+            long parallelDuration = 0;
+            int size = 3;
+            bool isEfficient = false;
+            int efficientSize = 0;
+
+            while (!isEfficient)
+            {
+                var matrix1 = new Matrix(size, size, true);
+                var matrix2 = new Matrix(size, size, true);
+
+                regularDuration = GetOperationTime(matricesMultiplier ,matrix1,matrix2);
+
+                parallelDuration = GetOperationTime(matricesMultiplierParallel, matrix1, matrix2);
+
+                size++;
+
+                if (parallelDuration < regularDuration)
+                {
+                    isEfficient= true;
+                    efficientSize = size;        
+                }
+
+            }
+
+            Assert.IsTrue(efficientSize > 0);
+            Assert.IsTrue(isEfficient);
+            Assert.IsTrue(parallelDuration < regularDuration);
         }
 
+        private long GetOperationTime(IMatricesMultiplier matricesMultiplier, IMatrix m1, IMatrix m2)
+        {
+            var regularStopWatch = Stopwatch.StartNew();
+            matricesMultiplier.Multiply(m1, m2);
+            regularStopWatch.Stop();
+        
+            return regularStopWatch.ElapsedMilliseconds;
+        }
+        
         #region private methods
 
         void TestMatrix3On3(IMatricesMultiplier matrixMultiplier)
